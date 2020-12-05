@@ -1,28 +1,31 @@
 version: "3"
 services:
-  pg_master:
-    build: ./master
+  pg_primary:
+    build: ./primary
+    container_name: pg_primary
     volumes:
       - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     environment:
-      - POSTGRES_USER=hamed
+      - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=hamed
+      - POSTGRES_DB=db
       - PG_REP_USER=rep
       - PG_REP_PASSWORD=123456
     networks:
       default:
         aliases:
           - pg_cluster
-  pg_slave:
-    build: ./slave
+  pg_replica:
+    build: ./replica
     environment:
-      - POSTGRES_USER=hamed
+      - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=hamed
+      - POSTGRES_DB=db
       - PG_REP_USER=rep
       - PG_REP_PASSWORD=123456
-      - PG_MASTER_HOST=pg_master
+      - PG_MASTER_HOST=pg_primary
     networks:
       default:
         aliases:
