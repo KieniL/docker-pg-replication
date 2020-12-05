@@ -19,6 +19,8 @@ services:
           - pg_cluster
   pg_replica:
     build: ./replica
+    ports:
+      - "5432"
     environment:
       - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=123456
